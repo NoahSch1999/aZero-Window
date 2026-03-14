@@ -1,0 +1,55 @@
+{
+  "version": 9,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 23,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "debug",
+      "displayName": "Debug",
+      "description": "Debug build using Ninja generator",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/debug",
+      "cacheVariables": {
+        "USE_DEBUG": true
+      },
+      "vendor": {
+        "https://sites.google.com/view/noah-schierenbeck/start": {
+          "autoFormat": true
+        }
+      }
+    },
+    {
+      "name": "release",
+      "displayName": "Release",
+      "description": "Release build using Ninja generator",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/release",
+      "cacheVariables": {
+        "USE_DEBUG": false
+      },
+      "vendor": {
+        "https://sites.google.com/view/noah-schierenbeck/start": {
+          "autoFormat": true
+        }
+      }
+    },
+    {
+      "name": "testexe",
+      "displayName": "Test exe",
+      "description": "Exe build using Ninja generator",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/testexe",
+      "cacheVariables": {
+        "TEST_EXE": true
+      },
+      "vendor": {
+        "https://sites.google.com/view/noah-schierenbeck/start": {
+          "autoFormat": true
+        }
+      }
+    }
+  ]
+}
