@@ -8,20 +8,17 @@ set(SDL_SHARED OFF)
 set(SDL_STATIC ON)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:CONSOLE")
 
-option(TEST_EXE "Make it as an exe instead of lib" OFF)
+option(COMPILE_EXAMPLE "Make it as an exe instead of lib" OFF)
 
-if (TEST_EXE)
+if (COMPILE_EXAMPLE)
     add_executable(aZeroWindow
         "src/aZeroWindow.cpp" 
         "examples/main.cpp"
-)
+    )
+    target_compile_definitions(aZeroWindow PUBLIC COMPILE_EXAMPLE)
 else()
     add_library(aZeroWindow 
         "src/aZeroWindow.cpp")
-endif()
-
-if (USE_DEBUG)
-    target_compile_definitions(aZeroWindow PUBLIC USE_DEBUG)
 endif()
 
 include(FetchContent)

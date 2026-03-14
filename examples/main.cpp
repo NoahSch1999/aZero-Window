@@ -1,5 +1,6 @@
 #include "aZeroWindow.hpp"
 
+#ifdef COMPILE_EXAMPLE
 class RenderWindow : public aZero::Window::Window_Win32 {
 public:
 	RenderWindow() = default;
@@ -31,3 +32,4 @@ int main(int argc, char* argv[]) {
 
 	return 0;
 }
+#endif
