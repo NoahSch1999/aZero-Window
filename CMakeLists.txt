@@ -8,6 +8,16 @@ set(SDL_SHARED OFF)
 set(SDL_STATIC ON)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:CONSOLE")
 
+include(FetchContent)
+
+FetchContent_Declare(
+    SDL3
+    GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+    GIT_TAG release-3.4.x
+)
+
+FetchContent_MakeAvailable(SDL3)
+
 option(COMPILE_EXAMPLE "Make it as an exe instead of lib" OFF)
 
 if (COMPILE_EXAMPLE)
@@ -20,16 +30,6 @@ else()
     add_library(aZeroWindow 
         "src/aZeroWindow.cpp")
 endif()
-
-include(FetchContent)
-
-FetchContent_Declare(
-    SDL3
-    GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
-    GIT_TAG release-3.4.x
-)
-
-FetchContent_MakeAvailable(SDL3)
 
 target_include_directories(aZeroWindow
     PUBLIC

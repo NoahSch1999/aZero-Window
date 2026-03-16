@@ -114,10 +114,10 @@ namespace aZero::Window {
 		}
 
 		// https://wiki.libsdl.org/SDL3/SDL_GetWindowSizeInPixels
-		std::tuple<int32_t, int32_t> GetClientDimensions() const {
-			int32_t w, h;
-			SDL_GetWindowSizeInPixels(m_Window, &w, &h);
-			return std::make_tuple(w, h);
+		std::array<int32_t, 2> GetClientDimensions() const {
+			std::array<int32_t, 2> dimensions;
+			SDL_GetWindowSizeInPixels(m_Window, &dimensions[0], &dimensions[1]);
+			return dimensions;
 		}
 
 		// https://wiki.libsdl.org/SDL3/SDL_SetWindowFullscreenMode
