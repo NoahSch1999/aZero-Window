@@ -4,12 +4,14 @@
 #include <stdexcept>
 #include <array>
 #include <vector>
+#include <optional>
 
 #include "SDL3/SDL.h"
-
+#include "SDL3_image/SDL_image.h"
 namespace aZero::Window {
 	struct WindowDesc {
-		std::string_view title;
+		std::string_view Title;
+		std::string_view IconPath;
 
 		struct Rect {
 			int32_t x = 0;
@@ -17,13 +19,17 @@ namespace aZero::Window {
 			int32_t w = 0;
 			int32_t h = 0;
 		};
-		Rect rect;
-		std::array<uint8_t, 4> clearColor;
-		SDL_WindowFlags windowFlags;
+		Rect mRect;
+		std::array<uint8_t, 4> ClearColor;
+		SDL_WindowFlags WindowFlags;
 
 		WindowDesc() = default;
-		WindowDesc(std::string_view title, const Rect& rect, const std::array<uint8_t, 4>& clearColor, SDL_WindowFlags windowFlags)
-			:title(title), rect(rect), clearColor(clearColor), windowFlags(windowFlags) { }
+		WindowDesc(std::string_view title, const Rect& rect, const std::array<uint8_t, 4>& clearColor, SDL_WindowFlags windowFlags, std::optional<std::string_view> iconPath)
+			:Title(title), mRect(rect), ClearColor(clearColor), WindowFlags(windowFlags) {
+			if (iconPath.has_value()) {
+				this->IconPath = iconPath.value();
+			}
+		}
 
 	};
 
@@ -57,19 +63,25 @@ namespace aZero::Window {
 			if (m_Window)
 				this->Destroy();
 
-			m_Window = SDL_CreateWindow(desc.title.data(), desc.rect.w, desc.rect.h, desc.windowFlags);
+			m_Window = SDL_CreateWindow(desc.Title.data(), desc.mRect.w, desc.mRect.h, desc.WindowFlags);
 
 			if (m_Window == NULL)
 				throw std::runtime_error("Failure on SDL_CreateWindow()");
 
 			m_ScreenSurface = SDL_GetWindowSurface(m_Window);
 
+			if (desc.IconPath.data())
+			{
+				m_Icon = SDL_LoadPNG(desc.IconPath.data());
+				SDL_SetWindowIcon(m_Window, m_Icon);
+			}
+
 			SDL_Rect rect;
-			rect.x = desc.rect.x;
-			rect.y = desc.rect.y;
-			rect.h = desc.rect.h;
-			rect.w = desc.rect.w;
-			SDL_FillSurfaceRect(m_ScreenSurface, &rect, SDL_MapRGBA(SDL_GetPixelFormatDetails(m_ScreenSurface->format), NULL, desc.clearColor[0], desc.clearColor[1], desc.clearColor[2], desc.clearColor[3]));
+			rect.x = desc.mRect.x;
+			rect.y = desc.mRect.y;
+			rect.h = desc.mRect.h;
+			rect.w = desc.mRect.w;
+			SDL_FillSurfaceRect(m_ScreenSurface, &rect, SDL_MapRGBA(SDL_GetPixelFormatDetails(m_ScreenSurface->format), NULL, desc.ClearColor[0], desc.ClearColor[1], desc.ClearColor[2], desc.ClearColor[3]));
 
 			if (!SDL_UpdateWindowSurface(m_Window))
 				throw std::runtime_error("Failure on SDL_UpdateWindowSurface()");
@@ -174,18 +186,21 @@ namespace aZero::Window {
 
 	private:
 		bool m_Quit = false;
+		SDL_Surface* m_Icon = nullptr;
 
 		virtual void PollEventImpl(const SDL_Event& event) = 0;
 
 		void Destroy() {
 			if (m_Window) {
 				SDL_DestroyWindow(m_Window);
+				SDL_DestroySurface(m_Icon);
 			}
 		}
 
 		void Move(WindowBase other) {
 			std::swap(m_Window, other.m_Window);
 			std::swap(m_ScreenSurface, other.m_ScreenSurface);
+			std::swap(m_Icon, other.m_Icon);
 			std::swap(m_Quit, other.m_Quit);
 		}
 	};

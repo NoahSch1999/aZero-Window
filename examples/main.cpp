@@ -20,7 +20,7 @@ private:
 int main(int argc, char* argv[]) {
 	aZero::Window::Init();
 
-	RenderWindow window(aZero::Window::WindowDesc("MyWindow", { 0,0,800,600 }, { 255,255,0,0 }, SDL_WINDOW_RESIZABLE));
+	RenderWindow window(aZero::Window::WindowDesc("MyWindow", { 0,0,800,600 }, { 255,255,0,0 }, SDL_WINDOW_RESIZABLE, {}));
 
 	const HWND handle = window.GetNativeHandle(); // Use for swapchain creation
 

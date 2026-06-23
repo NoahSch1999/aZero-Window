@@ -8,8 +8,16 @@ set(SDL_SHARED OFF)
 set(SDL_STATIC ON)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:CONSOLE")
 
-include(FetchContent)
+set(SDLIMAGE_AVIF OFF)
+set(BUILD_SHARED_LIBS OFF)
+set(SDLIMAGE_WEBP OFF)
+set(SDLIMAGE_JXL OFF)
 
+set(SDLIMAGE_PNG ON)
+set(SDLIMAGE_JPG ON)
+
+include(FetchContent)
+#
 FetchContent_Declare(
     SDL3
     GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
@@ -17,6 +25,14 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(SDL3)
+
+FetchContent_Declare(
+    SDL3_Image
+    GIT_REPOSITORY https://github.com/libsdl-org/SDL_image.git
+    GIT_TAG release-3.2.6
+)
+#set( SDL_DISABLE_INSTALL ON)
+FetchContent_MakeAvailable(SDL3_Image)
 
 option(COMPILE_EXAMPLE "Make it as an exe instead of lib" OFF)
 
@@ -37,4 +53,4 @@ target_include_directories(aZeroWindow
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_link_libraries(aZeroWindow PUBLIC SDL3::SDL3)
+target_link_libraries(aZeroWindow PUBLIC SDL3::SDL3 SDL3_image::SDL3_image)
