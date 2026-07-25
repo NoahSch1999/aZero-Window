@@ -22,6 +22,7 @@ FetchContent_Declare(
     SDL3
     GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
     GIT_TAG release-3.4.x
+    GIT_SHALLOW TRUE
 )
 
 FetchContent_MakeAvailable(SDL3)
@@ -30,6 +31,7 @@ FetchContent_Declare(
     SDL3_Image
     GIT_REPOSITORY https://github.com/libsdl-org/SDL_image.git
     GIT_TAG release-3.2.6
+    GIT_SHALLOW TRUE
 )
 #set( SDL_DISABLE_INSTALL ON)
 FetchContent_MakeAvailable(SDL3_Image)
